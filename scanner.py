@@ -15,10 +15,7 @@ from pcapfile import savefile
  parser.add_argument("-m", "--macho", action="store_const", const=1,
                      help="Finding and filtering Mach-O binarios")
  
- 
- print(parser.parse_args().elf)
- 
- print(args.pcap_path)
+ args = parser.parse_args()
  
  testcap = open(args.pcap_path, 'rb')
  
@@ -29,7 +26,7 @@ from pcapfile import savefile
  macho_regexp = r'(\xfe\xed\xfa\xce|\xfe\xed\xfa\xcf|\xce\xfa\xed\xfe|\xcf\xfa\xed\xfe)'
  pe_regexp = r'\x4e\x5a[\x00-\xff]*\x50\x45'
  
- capfile = savefile.load_savefile(testcap, verbose=True)
+ capfile = savefile.load_savefile(testcap)
  
  for x in capfile.packets:
      s = ''.join(chr(y) for y in x.raw())
@@ -69,9 +66,10 @@ from pcapfile import savefile
              body = s[body_index[1]:]
  
              if 'Content-Encoding: gzip' in headers:
-                 #print(s[:1000])
-                 print(body)
-                 body = zlib.decompress(body, 16 + zlib.MAX_WBITS)
+                try:
+                    body = zlib.decompress(body, 16 + zlib.MAX_WBITS)
+                except:
+                    pass
              if args.elf and re.search(elf_regexp,body,re.MULTILINE):
                  print('Package with ELF binary:',capfile.packets.index(x))
  
