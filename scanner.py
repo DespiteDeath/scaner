@@ -22,7 +22,7 @@ from pcapfile import savefile
  #https://ru.wikipedia.org/wiki/Executable_and_Linkable_Format#%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D1%82
  elf_regexp = r'\x7f\x45\x4c\x46'
 
- #https://en.wikipedia.org/wiki/List_of_file_signatures
+ #https://en.wikipedia.org/wiki/List_of_file_signatures  (List of file signatures)
  macho_regexp = r'(\xfe\xed\xfa\xce|\xfe\xed\xfa\xcf|\xce\xfa\xed\xfe|\xcf\xfa\xed\xfe)'
  pe_regexp = r'\x4e\x5a[\x00-\xff]*\x50\x45'
  
@@ -53,6 +53,7 @@ from pcapfile import savefile
  
              if args.macho and re.search(pe_regexp,body,re.MULTILINE):
                  print('Package with PE binary:',capfile.packets.index(x))
+    
      elif re.search(r'HTTP/1\.(1|0)\ \d*\ \w*',s,re.MULTILINE):
          #http response
          indexes = re.search(r'HTTP/1\.(1|0)\ \d*\ \w*',s,re.MULTILINE).span(0)
